@@ -8,7 +8,7 @@
 - Pass state from children components to their parents as arguments to functions
 
 ## Framing
-For today, we'll be creating a Todo app in React. Before we start coding it. We're going to take a look at some "high level" paradigms and principles of React. Following that, we'll do a code review of a simple todo application. Then finally we'll build the application.
+For today, we'll be creating a Todo app in React. Before we start coding it. We're going to take a look at some "high level" paradigms and principles of React. Following that, we'll do a code review of a simple todo application. Then, we'll build the application.
 
 We've learned a tremendous amount about object oriented structures for web development. And they were great. With angular, we dabbled a bit with feature based separation of concerns. React takes that separation and doubles down on it.
 
@@ -150,9 +150,9 @@ Some things you should consider/do during code review:
 > while changing the app, if the code breaks, just do a `$ git checkout -- .` to get back to the original code base
 
 ## React Todo
-Alright it's time to build! We're going to be building this application from scratch!
+Alright it's time to build! We're going to be building this application from scratch! It won't be exactly like the repo above, but it'll be pretty close and follow much of the same structure.
 
-> If you get behind, all code written today will be in the lesson plan. Additionally the repo contains functional code. We can also catch people up during breaks/lunch. So please keep questions pertinent to content rather then debugging specific errors you may be getting. Should also note that some of the code snippets will be repetitions to reiterate points. Some of them might just be updates to existing files. Some of them might be brand new content you have to add all of.
+> If you get behind, all code written today will be in the lesson plan. Additionally the repo you code reviews contains most of the same code. We can also catch people up during breaks/lunch. So please keep questions pertinent to content rather then debugging specific errors you may be getting. Should also note that some of the code snippets will be repetitions to reiterate points of learning. Some of them might just be updates to existing files. Some of them might be brand new content you have to add all of.
 
 ### Getting Started
 
@@ -300,7 +300,7 @@ class Header extends Component{
 export default Header
 ```
 
-In this file, we've grabbed some dependencies and stored them in variables and then defined a component. The `Link` component is exactly what you think it is a link to another route. You can think of it as `data-ui-sref` in angular or even an `href` in plain 'ol HTML
+In this file, we've grabbed some dependencies and stored them in variables and then defined a component. The `Link` component is exactly what you think it is, a link to another route. You can think of it as `data-ui-sref` in angular or even an `href` in plain 'ol HTML
 
 Awesome! We now have a header showing up! Let's click on the link.
 
@@ -416,12 +416,12 @@ class TodosContainer extends Component {
 export default TodosContainer
 ```
 
-Awesome, we can see the response from our database as soon as the page loads, we know it's working! However, its completely in the wrong spot and we don't have anything we're passing todos to.
+Awesome, we can see the response from our database as soon as the page loads, we know it's working! However, its completely in the wrong spot and we don't have anything we're passing todos to... yet!
 
 Now that we can get our data, let's code how we present that data. It'll be a bit before we connect these pieces and actually see our todos in our app, but just hold on we'll get there!
 
 ### Rendering A Todo
-Let's start at the bottom and bubble up. It'll be nice if each todo we're its own component. To follow FIRST. Let's create `src/components/Todo.js` and put the following in it:
+Let's start at the bottom and bubble up. It'll be nice if each todo we're its own component. To follow FIRST(Focused Independent Reusable Small Testable). Let's create `src/components/Todo.js` and put the following in it:
 
 ```js
 import React, {Component} from 'react'
@@ -522,7 +522,7 @@ constructor(){
 }
 ```
 
-This is just like initialize in ruby(only a bit different). `constructor()` is basically a function that invokes when an instance of our class gets initialized. When we call `super()` were basically saying invoke the same `constructor` function that the React library defines for their `constructor`. In addition to that initialize a state for this component in which todos is a property and its value is an empty array. We can then set the state any other time in our application using `.setState()`.
+This is just like initialize in ruby(only a bit different). `constructor()` is basically a function that invokes when an instance of our class gets initialized. When we call `super()` were basically saying invoke the same `constructor` function that the React library defines for their `constructor`. In addition to that initialize a state for this component in which todos is a property and set its value as an empty array. We can then set the state any other time in our application using `.setState()`.
 
 ```js
 fetchData(){
@@ -638,7 +638,7 @@ render(){
       <h2>Create Todo Here!</h2>
       <form onSubmit={event => this.onFormSubmit(event)}>
         <input
-          onChange={e => this.onInputChange(e)}
+          onChange={event => this.onInputChange(event)}
           placeholder='Write a todo here ...'
           type='text'
           value={(this.state && this.state.todo) || ''} />
@@ -726,7 +726,7 @@ Using axios we create the todo. In the promise, we fetch all the todos from the 
 
 ## Backtrack - How did we pass state from child to parent?
 
-Remember that in the submit event of the form, we added a function:
+Remember that in the submit event of the form, we used a function `this.props.createTodo()`:
 
 In `src/components/CreateTodoForm`:
 
@@ -825,4 +825,5 @@ TodoModel.deleteTodo = function(todoId){
 
 The `deleteTodo` takes the todo, passed from the child Component of `Todo` up through a chain of references. It deletes it with axios. Upon deletion, all todos are grabbed from the container state and filters out the one deleted, updates the state to have only the remaining todos.
 
-## Editing Todos (if time allows students will talk through the solution)
+## Editing Todos and Updating Completion Status
+> if time allows students will talk through the solution
