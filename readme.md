@@ -1,3 +1,11 @@
+<!-- Es6ify -->
+<!--   replace .bind(this) -->
+<!--   replace with class -->
+<!--   replace var with let -->
+<!-- Edit Update -->
+<!-- Component Reusability -->
+<!-- Refactor res.data stuff for update and delete -->
+<!-- Add completed todos route: reuse existing components -->
 # React Todo
 
 ## Learning Objectives
@@ -11,103 +19,6 @@
 For today, we'll be creating a Todo app in React. Before we start coding it. We're going to take a look at some "high level" paradigms and principles of React. Following that, we'll do a code review of a simple todo application. Then, we'll build the application.
 
 We've learned a tremendous amount about object oriented structures for web development. And they were great. With angular, we dabbled a bit with feature based separation of concerns. React takes that separation and doubles down on it.
-
-### F.I.R.S.T. Components
-
-Building in React is a fundamental shift from how we have developed previously. Throughout this course, we've focused on an object-oriented paradigm.
-
-<details>
-  <summary>What does it mean to follow an OOP paradigm? What are the benefits/pitfalls of using OOP?</summary>
-
-  > Encapsulation (of a sort). An object is a wrapper for behavior and data. It's a logical, helpful way to organize data. But it can be hard to maintain when dealing with a large number of objects and disparate features.
-
-</details>
-
-<details>
-  <summary>In what way do we encapsulate our code in React?</summary>
-
-  > Through components that define the structure, styling and behavior of a UI element. Furthermore, data flows independently through components.
-
-</details>
-
-A React component is built to expect an input and render a UI with it. More importantly, a (well-structured) component only receives data specific to its purpose. For example, our `Post` component from the blog example will only receive `title`, `author` and the like as inputs -- nothing else.
-
-While this doesn't sound too groundbreaking, it is very different from the OOP principles we've gotten used to. This is because React follows a more **functional** approach to programming. For React components under this approach, **the same input will always produce the same output**.
-
-You can build an app in a lot of ways, but if you want to look at some of the best practices, we can talk about what a component should be: **F.I.R.S.T.**
-
-#### Focused
-
-Components should do one thing and do it well. One thing that's hard to adjust to in React coming from an OOP background is packing too much information into a component.
-
-> Think back to the Post component from yesterday's class.
-
-#### Independent
-
-Components should increase cohesion and reduce coupling. Behavior in one component should not impact the behavior of another. In other words, components should not rely on one another.
-
-> But they should compliment one another, just like our Comment component did for Post in yesterday's class.
-
-#### Reusable
-
-Components should be written in a way that reduces the duplication of code.
-
-> We could have nested yesterday's Comment in a component other than Post.
-
-#### Small
-
-Ideally, components should be short and condensed.
-
-#### Testable
-
-Because the same input will always produce the same output, components are easily unit testable.
-
-> If you're interested, [Ava](https://www.npmjs.com/package/ava) is a popular testing library for React.
-
-## State (10 minutes / 0:30)
-
-So why do we follow all these principles? If not, it is easy to lose control of our application's state.
-
-<details>
-  <summary><strong>Q: What do we mean by a React component's "state"?</strong></summary>
-
-  > The properties of a component that change as the application runs. As opposed to .props, which are immutable.
-
-</details>
-
-So we've talked about `.state` at a more granular level. But now we're asking what it means for an application to have a singular "state" at a given point in time.
-
-So what is this "state"? The organization and flow of data in an application at any point in time.
-
-Let's think of states in terms of a game: Pokémon.
-
-<details>
-  <summary><strong>Q: What can you say about the player when a new game starts?</strong></summary>
-
-  > 0 Pokemon. We're stuck in Pallet Town (City #1). Professor Oak is around.
-
-</details>
-
-<details>
-  <summary><strong>Q: What about when the game ends?</strong></summary>
-
-  > 150 Pokemon. 8 gym badges.
-
-</details>
-
-It's easy to think about this in terms of a game, because there is a clear idea of a beginning, end and states that reflect progress in between. You can attribute very specific data to all of these states.
-
-<details>
-  <summary><strong>Q: So we know an application can have different states. But how do we transition in between them?</strong></summary>
-
-  > Events.
-
-</details>
-
-You can think of your React application as a state machine. It receives user interaction as input and what we receive as output is a UI that reflects a brand new state.
-
-Let's look at the process of a rendering a React Component...
-![](./react-render.png)
 
 ## You do - Checkout React Todo (60m)
 Before we can checkout the react todo app, we need to grab up our backend that will serve up our todos:
@@ -341,6 +252,9 @@ export default TodosContainer
 Then we just have to update the routes in `src/config/routes.js`:
 
 ```js
+//...
+import TodosContainer from '../containers/TodosContainer'
+
 module.exports = (
   <Route path='/' component={App}>
     <Route path='/todos' component={TodosContainer}/>
@@ -385,7 +299,7 @@ import axios from 'axios'
 function TodoModel(){}
 
 TodoModel.all = function(){
-  var request = axios.get("http://localhost:4000/todos")
+  let request = axios.get("http://localhost:4000/todos")
   return request
 }
 
@@ -394,7 +308,7 @@ module.exports = TodoModel
 
 The Axios API is awesome! It's pretty intuitive! When we use the `all` method on our `TodoModel`, it will make a get request to our API for all todos. We return the request so that we can chain promises to it.
 
-Unfortunately, We can't really test this file out in isolation. We can only test it out in the implementation of the react application due to building/compiling. This isn't going to be where we call this, but just to see it work, let's shove it in our `TodosContainer`'s render method:
+Unfortunately, We can't really test this file out in isolation. We can only test it out in the implementation of the react application due to building/compiling. This isn't ultimately going to be where we call this, but for testing purposes, let's shove it in our `TodosContainer`'s render method:
 
 ```js
 import React, {Component} from 'react'
@@ -402,7 +316,7 @@ import TodoModel from '../models/Todo'
 
 class TodosContainer extends Component {
   render(){
-    TodoModel.all().then(function(res){
+    TodoModel.all().then( (res) => {
       console.log(res);
     })
     return (
@@ -450,13 +364,13 @@ import Todo from './Todo'
 
 class Todos extends Component {
   render(){
-    var todos = this.props.todos.map(function(todo){
+    let todos = this.props.todos.map( (todo) => {
       return (
         <Todo
           key={todo.id}
           todo={todo}/>
       )
-    }, this)
+    })
     return(
       <div className="todos">
         {todos}
@@ -565,11 +479,12 @@ In `src/containers/TodosContainer.js`:
 
 In `src/components/Todos.js`:
 ```js
-var todos = this.props.todos.map(function(todo){
+  let todos = this.props.todos.map( (todo) => {
   return (
     <Todo
       key={todo.id}
-      todo={todo}/>
+      todo={todo}
+    />
   )
 })
 ```
@@ -596,6 +511,13 @@ Let's create a file `src/components/CreateTodoForm.js` and fill it out with the 
 import React, {Component} from 'react'
 
 class CreateTodoForm extends Component {
+  constructor(){
+    super()
+    //sets the initial state via the constructor! that's the constructor's job :)
+    this.state = {
+      todo: ''
+    }
+  }
   onInputChange(event){
     this.setState({
       todo: event.target.value
@@ -603,7 +525,7 @@ class CreateTodoForm extends Component {
   }
   onFormSubmit(event){
     event.preventDefault()
-    var todo = this.state.todo
+    let todo = this.state.todo
     this.props.createTodo(todo)
     this.setState({
       todo: ""
@@ -618,7 +540,7 @@ class CreateTodoForm extends Component {
             onChange={event => this.onInputChange(event)}
             placeholder='Write a todo here ...'
             type='text'
-            value={(this.state && this.state.todo) || ''} />
+            value={this.state.todo} />
           <button type='submit'>Create Todo!</button>
         </form>
       </div>
@@ -641,20 +563,22 @@ render(){
           onChange={event => this.onInputChange(event)}
           placeholder='Write a todo here ...'
           type='text'
-          value={(this.state && this.state.todo) || ''} />
+          value={this.state.todo} />
         <button type='submit'>Create Todo!</button>
       </form>
     </div>
   )
 }
 ```
+
+We define the initial state of the form in the constructor.
+
 Looks like a form. When it gets submitted we run a function (we're using es6 arrow function here to pass an anonymous function with an event argument). That function is the `.onFormSubmit` function defined in this component.
 
 > `onSubmit` is reserved JSX to define an event for form submission, almost identical to `ng-submit` in angular
 
 Similarly when the `input` is changed we run `.onInputChange`.
 
-Then we have this weird line of code `value={(this.state && this.state.todo) || ''}` The reason we have to do this, is because state is not initially defined. We could either define it in the constructor, or do this. Basically if `this.state.todo` exists, use that as the value, if not use an empty string.
 
 Let's take a look at the `onInputChange` function first:
 
@@ -692,11 +616,10 @@ import CreateTodoForm from '../components/CreateTodoForm'
 // adding rest of code to container, more code above
 createTodo(todo){
   var newTodo = {body: todo, completed: false}
-  TodoModel.create(newTodo).then(function(res){
-    var todos = this.state.todos
-    todos.push(res.data)
+  TodoModel.create(newTodo).then( (res) => {
+    var todos = res.data
     this.setState({todos})
-  }.bind(this))
+  })
 }
 render(){
   return (
@@ -785,7 +708,7 @@ var todos = this.props.todos.map(function(todo){
       todo={todo}
       onDeleteTodo={this.props.onDeleteTodo}/>
   )
-}, this)
+})
 ```
 
 Looks like it's not defined here either but passed yet again from a parent container. Finally in the `src/components/TodosContainer.js`:
