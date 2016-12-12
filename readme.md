@@ -1,7 +1,6 @@
 <!-- Es6ify -->
 <!--   replace .bind(this) -->
-<!--   replace with class -->
-<!--   replace var with let -->
+
 <!-- Edit Update -->
 <!-- Component Reusability -->
 <!-- Refactor res.data stuff for update and delete -->
@@ -296,20 +295,37 @@ Now in `src/models/Todo.js`:
 ```js
 import axios from 'axios'
 
-function TodoModel(){}
-
-TodoModel.all = function(){
-  let request = axios.get("http://localhost:4000/todos")
-  return request
+class TodoModel(){
+  static all(){
+    let request = axios.get("http://localhost:4000/todos")
+    return request
+  }
 }
 
-module.exports = TodoModel
+export default TodoModel
 ```
 
 The Axios API is awesome! It's pretty intuitive! When we use the `all` method on our `TodoModel`, it will make a get request to our API for all todos. We return the request so that we can chain promises to it.
 
-Unfortunately, We can't really test this file out in isolation. We can only test it out in the implementation of the react application due to building/compiling. This isn't ultimately going to be where we call this, but for testing purposes, let's shove it in our `TodosContainer`'s render method:
+Note also that `all()` is a static method. What does this mean? A static method can be called without there being an **instance** of the class containing the static method. This will allow us to call `all()` in the following way (without ***instantiating*** the class with new):
 
+```js
+let todos = TodoModel.all()
+```
+
+Does this type syntax look familiar at `.all`? If not, think back to Rails, where in a Todo app, we call the **class method** `.all`:
+
+```rb
+@todos = Todo.all
+```
+
+**Class methods** don't require an instance of the class in order to be called, but an **instance method** does. [More on Static Methods in JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Static_methods)
+
+We can't really test out the code in this file in isolation, so we must `import` it into our application in order to test it. The logical place to import this code is in the `TodosContainer` component.
+
+For now, let's toss this in the `TodosContainer`'s `render()` method: this isn't ultimately going to be where we want to call `TodoModel.all()`, but for testing purposes, it will suffice.
+
+In `components/TodosContainer.js`:
 ```js
 import React, {Component} from 'react'
 import TodoModel from '../models/Todo'
@@ -404,12 +420,12 @@ class TodosContainer extends Component {
     this.fetchData()
   }
   fetchData(){
-    TodoModel.all().then(function(res){
+    TodoModel.all().then( (res) => {
       this.setState ({
         todos: res.data,
         todo: ''
       })
-    }.bind(this))
+    })
   }
   render(){
     return (
@@ -440,12 +456,12 @@ This is just like initialize in ruby(only a bit different). `constructor()` is b
 
 ```js
 fetchData(){
-  TodoModel.all().then(function(res){
+  TodoModel.all().then( (res) => {
     this.setState ({
       todos: res.data,
       todo: ''
     })
-  }.bind(this))
+  })
 }
 ```
 
@@ -597,7 +613,7 @@ Basically whenever this input changes, we're going to set the state of this comp
 ```js
 onFormSubmit(event){
   event.preventDefault()
-  var todo = this.state.todo
+  let todo = this.state.todo
   this.props.createTodo(todo)
   this.setState({
     todo: ""
@@ -615,9 +631,9 @@ import CreateTodoForm from '../components/CreateTodoForm'
 
 // adding rest of code to container, more code above
 createTodo(todo){
-  var newTodo = {body: todo, completed: false}
+  let newTodo = {body: todo, completed: false}
   TodoModel.create(newTodo).then( (res) => {
-    var todos = res.data
+    let todos = res.data
     this.setState({todos})
   })
 }
@@ -639,8 +655,8 @@ We see that we pass the `createTodo` function of THIS container component TO the
 In the actual `createTodo` function. We can see that we construct everything we need about a todo in an object and store it in a variable. We then pass that object to a `.create` method on our `TodoModel` that ... hasn't been defined yet. Let's define it now. In `src/models/Todo.js`:
 
 ```js
-TodoModel.create = function(todo){
-  var request = axios.post("http://localhost:4000/todos", todo)
+static create(todo) {
+  let request = axios.post("http://localhost:4000/todos", todo)
   return request
 }
 ```
@@ -656,7 +672,7 @@ In `src/components/CreateTodoForm`:
 ```js
 onSubmit(event){
   event.preventDefault()
-  var todo = this.state.todo
+  let todo = this.state.todo
   this.props.createTodo(todo)
   this.setState({
     todo: ""
@@ -701,7 +717,7 @@ class Todo extends Component {
 We've added a span with an `X` in it. When it gets clicked it invokes the `onDeleteTodo` function defined on `props`. That means we need to pass `.onDeleteTodo` as `props` from the parent component of `Todos`. In `src/components/Todos.js`
 
 ```js
-var todos = this.props.todos.map(function(todo){
+let todos = this.props.todos.map( (todo) => {
   return (
     <Todo
       key={todo.id}
@@ -715,13 +731,10 @@ Looks like it's not defined here either but passed yet again from a parent conta
 
 ```js
 deleteTodo(todo){
-  TodoModel.deleteTodo(todo.id).then(function(res){
-    var todos = this.state.todos
-    var todosMinusDeleted = todos.filter((eachTodo)=> !(eachTodo.id === todo.id))
-    this.setState({
-      todos: todosMinusDeleted
-    })
-  }.bind(this))
+  TodoModel.delete(todo).then( (res)=>{
+    let todos = this.state.todos
+    this.setState({todos})
+  })
 }
 render(){
   return (
@@ -740,8 +753,8 @@ render(){
 Before we talk about the above code, lets look at what delete looks like in our `TodoModel`. In `src/models/Todo.js`:
 
 ```js
-TodoModel.deleteTodo = function(todoId){
-  var request = axios.delete(`http://localhost:4000/todos/${todoId}`)
+static delete(todo){
+  let request = axios.delete(`http://localhost:4000/todos/${todo.id}`)
   return request
 }
 ```
