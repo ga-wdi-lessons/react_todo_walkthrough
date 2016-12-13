@@ -764,7 +764,7 @@ Looks like it's not defined here either but passed yet again from a parent conta
 ```js
 deleteTodo(todo){
   TodoModel.delete(todo).then( (res)=>{
-    let todos = this.state.todos
+    let todos = res.data
     this.setState({todos})
   })
 }
