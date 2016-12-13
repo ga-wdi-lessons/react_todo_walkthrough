@@ -322,7 +322,7 @@ Now in `src/models/Todo.js`:
 ```js
 import axios from 'axios'
 
-class TodoModel(){
+class TodoModel {
   static all(){
     let request = axios.get("http://localhost:4000/todos")
     return request
@@ -457,7 +457,6 @@ class TodosContainer extends Component {
   render(){
     return (
       <div className="todosComponent">
-      bob
         <Todos
           todos={this.state.todos} />
       </div>
