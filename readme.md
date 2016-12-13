@@ -1,10 +1,3 @@
-<!-- Es6ify -->
-<!--   replace .bind(this) -->
-
-<!-- Edit Update -->
-<!-- Component Reusability -->
-<!-- Refactor res.data stuff for update and delete -->
-<!-- Add completed todos route: reuse existing components -->
 # React Todo
 
 ## Learning Objectives
@@ -14,20 +7,45 @@
 - Pass state from parent components to children as props
 - Pass state from children components to their parents as arguments to functions
 
-## Framing
-For today, we'll be creating a Todo app in React. Before we start coding it. We're going to take a look at some "high level" paradigms and principles of React. Following that, we'll do a code review of a simple todo application. Then, we'll build the application.
+## Framing (0:10 / 0:10)
+For today, we'll be creating a Todo app in React. Before we start coding it, we're going to do a code review of a simple todo application. Then, we'll build the application.
 
-We've learned a tremendous amount about object oriented structures for web development. And they were great. With angular, we dabbled a bit with feature based separation of concerns. React takes that separation and doubles down on it.
+We've learned a tremendous amount about object oriented structures for web development. And they were great. With angular, we dabbled a bit with feature-based separation of concerns. React's component model takes that separation further and reduces the potential of tight coupling that often attends object oriented. Think of the FIRST principles:
 
-## You do - Checkout React Todo (60m)
+#### Focused
+
+Components should do one thing and do it well. It takes some time for most developers coming from an OOP background to adjust to React's component-based architecture. At first, a dev from an OOP background may pack too much information into a component. This is a fine starting point, but as you progress you will get a better sense of how to minimize component code.
+
+> Think back to the Post component from the intro's class.
+
+#### Independent
+
+Components should increase cohesion and reduce coupling. Behavior in one component should not impact the behavior of another. In other words, components should not rely on one another.
+
+> But they should compliment one another, just like our Comment component did for Post in the intro's class.
+
+#### Reusable
+
+Components should be written in a way that reduces the duplication of code. Reusability keeps things DRY!
+
+#### Small
+
+Ideally, components should be short and condensed.
+
+#### Testable
+
+Because the same input will always produce the same output, components are easily unit testable.
+
+
+## You do - Checkout React Todo (0:05 / 0:15)
 Before we can checkout the react todo app, we need to grab up our backend that will serve up our todos:
 
 ```bash
 $ git clone git@github.com:ga-wdi-exercises/react-todo-api.git
 $ cd react-todo-api
-$ rake db:create
-$ rake db:migrate
-$ rake db:seed
+$ bundle exec rake db:create
+$ bundle exec rake db:migrate
+$ bundle exec rake db:seed
 $ rails s -p 4000
 ```
 
@@ -45,38 +63,41 @@ Now go to `http://localhost:3000` and play with the site!
 
 After we've played with the site for a bit, take a look at the code base. Start at `src/index.js`. In that file, we can see that it uses another file `config/routes.js`. Don't worry too much about understanding all the specific syntax just get a good overview of the code base.
 
-### Deliverables -
-As you progress from one file to another and scan through the code base, write down in-line comments of what you think that particular piece of code is doing. You don't have to write a comment for every line, but at least one for each function/method
+### Code Review in Comments - Pair Up! (0:15 / 0:30)
+
+Pair up!
+
+As you both progress from one file to another and scan through the code base, write down in-line comments of what you think that particular piece of code is doing. You don't have to write a comment for every line, but at least one for each function/method
 
 Some things you should consider/do during code review:
 
-- how is the application CRUD'ing the data?
-- what is the applications point of entry?
-- are any components reused? which one/ones?
-- how is state being passed from parent components to their children?
-- how is state being passed from child component to it parents?(*this is tough!*)
-- change things up play with it, put a `console.log()` if your not sure what something is or when it's executing.
+- How is the application CRUD'ing the data?
+- What is the application's point of entry?
+- Are any components reused? Which one/ones?
+- How is state being passed from parent components to their children?
+- How is state being passed from child component to it parents? (*this is tough!*)
+- Make use of a `console.log()` if you are not sure what data some variable is holding, or when a method is executing.
 
 > while changing the app, if the code breaks, just do a `$ git checkout -- .` to get back to the original code base
 
 ## React Todo
 Alright it's time to build! We're going to be building this application from scratch! It won't be exactly like the repo above, but it'll be pretty close and follow much of the same structure.
 
-> If you get behind, all code written today will be in the lesson plan. Additionally the repo you code reviews contains most of the same code. We can also catch people up during breaks/lunch. So please keep questions pertinent to content rather then debugging specific errors you may be getting. Should also note that some of the code snippets will be repetitions to reiterate points of learning. Some of them might just be updates to existing files. Some of them might be brand new content you have to add all of.
+> If you get behind, all code written today will be in the lesson plan. Additionally the repo you code reviews contains most of the same code. So please keep questions pertinent to content rather then debugging specific errors you may be getting. Should also note that some of the code snippets will be repetitions to reiterate points of learning. Some of them might just be updates to existing files. Some of them might be brand new content you have to add all of.
 
 ### Getting Started
 
-Let's first create the react app.
+Close down the react app you have running currently. Next, let's create the react app.
 
 ```bash
-$ create-react-app react-todo
-$ cd react-todo
+$ create-react-app my-react-todo
+$ cd my-react-todo
 $ npm start
 ```
 
-Great if we navigate to [`localhost:3000`](http://localhost:3000). We'll see the generic react application.seless stuff
+Now, if we navigate to [`localhost:3000`](http://localhost:3000) we will see the boilerplate create-react-app React application.
 
-### First Step - Hello World
+### First Step - Hello World (0:10 / 0:40)
 
 #### Get rid of things we won't use
 
@@ -110,10 +131,10 @@ export default App;
 
 > Hooray for automatic rerendering on save! If we just switch over to our browser we'll automatically see our updates.
 
-### React Router
+### React Router (0:45 / 0:55)
 We're going to use React Router today to introduce it as a concept. However, it isn't strictly necessary for this application. We're really just going for exposure here. There's a lot to learn about react router and we'll just be scratching the surface. If you want to dive deeper, checkout [this tutorial](https://github.com/reactjs/react-router-tutorial)
 
-We need React Router in the same way that we needed angular routers. We need a way to link to various url states in our application. Because our application will be a spa, we still want to preserve different states via the url. This application's states (not to be confused with component state) will just be the root url and a url to all todos(`/` and `/todos`)
+We need React Router in the same way that we needed angular routers. We need a way to link to various urls to components in our application. Because our application will be a SPA, we still want to preserve different application-states via the url. This Todo app's application-states (not to be confused with component state) will just be the root url and a url to all todos(`/` and `/todos`)
 
 ### Creating Routes
 It's great, Routes are just react Components as well! Let's start by installing the `react-router` dependency, making a `config` folder and a `routes.js` file that will contain our routes:
@@ -156,12 +177,18 @@ ReactDOM.render(
 );
 ```
 
-In this file, we're using the `Router` component to specify what react should render. We pass in some properties to this `Router` component: `routes`, the file we just defined prior, and `browserHistory`. We've already gone over `routes.js` but not `browserHistory`. In a nutshell, a history knows how to listen to the browser's address bar for changes and parses the URL into a location object that the router can use to match routes and render the correct set of components.
+In this file, we're using the `Router` component to specify what react should render. We pass in some properties to this `Router` component: `routes`, the file we just defined prior, and `browserHistory`.
+
+We've just gone over `routes.js` but not `browserHistory`.
+
+In a nutshell, a history knows how to listen to the browser's address bar for changes and parses the URL into a location object that the router can use to match routes and render the correct set of components.
 
 Great, we should now be able to see hello world show up!
 
-### A Simple Component
-Before we add another route, let's change the header to be more applicable and make it, it's own component.
+## Break (0:10 / 1:05)
+
+### A Simple Component (0:05 / 1:10)
+Before we add another route, let's change the header to be more applicable and make it its own component.
 
 In `src/App.js`:
 
@@ -218,9 +245,9 @@ Awesome! We now have a header showing up! Let's click on the link.
 Warning: [react-router] Location "/todos" did not match any routes
 ```
 
-This warning makes sense, our `config/routes.js` only has a reference to `'/'` and nothing else. Let's fix that by adding the first parts of our apps main functionality. But before that... let's talk about containers.
+This warning makes sense, our `config/routes.js` only has a reference to `'/'` and nothing else. We'll fix that by adding the first parts of our app's main functionality. But before that... let's talk about containers.
 
-### Containers
+### Containers (0:20 / 1:30)
 As we first start to write this container, its going to seem like just another component. Remember that  React components should be FIRST: focused, independent, reusable, small, and testable. In order to help keep components slim, a good practice is to move as much of the business logic surrounding a component's state to a container component. We're going to put all that logic in this container. It will start out very similarly to our `Header` component, but end up much more complex.
 
 Let's start by creating a containers folder and then the container file:
@@ -278,9 +305,9 @@ Great everything works!
 
 ### PAUSE!
 
-Everything up to this point, is most of what you need to know about using react for a website NOT using a back end. Just add css through index.css and you're good to go!
+Everything up to this point, is most of what you need to know about using react for a website NOT using a back end. [Just add css through index.css and you're good to go!](https://gist.github.com/superbuggy/29693beaa19cbc2a9171aba4f373dc32)
 
-### Fetching Data
+### Fetching Data (0:30 / 2:00)
 
 React actually isn't as full featured as say AngularJS or BackboneJS. It relies on third party libraries to fetch data. Today, we'll be using a library called [Axios](https://github.com/mzabriskie/axios), a promise based HTTP client for the browser and node. Let's install the module now and also create the folder/file that will contain our database logic:
 
@@ -349,8 +376,8 @@ export default TodosContainer
 Awesome, we can see the response from our database as soon as the page loads, we know it's working! However, its completely in the wrong spot and we don't have anything we're passing todos to... yet!
 
 Now that we can get our data, let's code how we present that data. It'll be a bit before we connect these pieces and actually see our todos in our app, but just hold on we'll get there!
-
-### Rendering A Todo
+## Break (0:10 / 2:10)
+### Rendering A Todo (0:20 / 2:30)
 Let's start at the bottom and bubble up. It'll be nice if each todo we're its own component. To follow FIRST(Focused Independent Reusable Small Testable). Let's create `src/components/Todo.js` and put the following in it:
 
 ```js
@@ -477,7 +504,7 @@ componentDidMount(){
 Every component in react undergoes a component lifecycle. There are several "hooks" throughout this lifecycle. You can think of hooks like events that we can trigger functionality on. `componentDidMount` is a reserved hook that happens after a component renders. There are many hooks, this is a [great blog post](http://busypeoples.github.io/post/react-component-lifecycle/) that goes into much better detail of the lifecycle of a component.
 
 
-You might be asking yourself: "Wait, why are we getting the data after the components already been rendered?" ([I did too](http://stackoverflow.com/questions/39338464/reactjs-why-is-the-convention-to-fetch-data-on-componentdidmount))
+You might be asking yourself: "Wait, why are we getting the data after the components already been rendered?" ([Andy did too](http://stackoverflow.com/questions/39338464/reactjs-why-is-the-convention-to-fetch-data-on-componentdidmount))
 
 That's because a re-render will always happen because fetching data happens asynchronously. Here's the [Facebook recommendation](https://facebook.github.io/react/tips/initial-ajax.html)
 
@@ -514,7 +541,7 @@ In `src/components/Todo.js`:
 ```
 
 ### PAUSE - Why is this awesome?
-We could stop the lesson here and take this knowledge and build lots of cool things with it. Most of the API's developers have access to are read only. That said, if we know an endpoint to get data, we now know how to use react to display that data.
+We could stop the lesson here and take this knowledge and build lots of cool things with it. Most of the API's developers have access to are read only. That said, if we know an endpoint to get data, we now know how to use React to display that data.
 
 ### Creating Todos
 We're going to want to create a component that handles the form for creating todos. Before we build this feature out, How can we pass state from a child component to a parent? The opposite is easy, because we're able to just pass properties to our child components. Child state to parent state is much more difficult because we can't pass properties like that. Its unidirectional. The answer? Callbacks.
@@ -707,7 +734,12 @@ class Todo extends Component {
   render(){
     return(
       <p data-todos-index={this.props.todo.id}>
-        <span>{this.props.todo.body}</span> | <span className='deleteButton' onClick={() => this.props.onDeleteTodo(this.props.todo)}>X</span>
+        <span>{this.props.todo.body}</span>
+        <span
+          className='deleteButton'
+          onClick={() => this.props.onDeleteTodo(this.props.todo)}>
+            (X)
+        </span>
       </p>
     )
   }
@@ -761,5 +793,100 @@ static delete(todo){
 
 The `deleteTodo` takes the todo, passed from the child Component of `Todo` up through a chain of references. It deletes it with axios. Upon deletion, all todos are grabbed from the container state and filters out the one deleted, updates the state to have only the remaining todos.
 
-## Editing Todos and Updating Completion Status
-> if time allows students will talk through the solution
+## Editing and Updating Todos
+
+### Implementing Edit
+
+In `containers/TodosContainer.js`:
+<!-- TodosContainer changes -->
+
+```js
+editTodo(todo){
+  this.setState({
+    editingTodoId: todo.id
+  })
+}
+render(){
+  return (
+    <div className='TodosContainer'>
+      <h2>This is the Todos Container</h2>
+      <Todos
+        todos={this.state.todos}
+        editingTodoId={this.state.editingTodoId}
+        onEditTodo={this.editTodo.bind(this)}
+        onDeleteTodo={this.deleteTodo.bind(this)} />
+      <CreateTodoForm
+        createTodo={this.createTodo.bind(this)} />
+    </div>
+  )
+}
+```
+
+Why would we add editingTodoId to the container? Why might the container be aware of a ***single*** todo ID, in the context of an edit?
+<!-- Todos changes -->
+
+In the `components/Todos.js`
+
+add `editingTodoId` and `onEditTodo` to Todo props
+
+```js
+let todos = this.props.todos.map( (todo) => {
+  return (
+    <Todo
+      key={todo.id}
+      todo={todo}
+      editingTodoId={this.props.editingTodoId}
+      onEditTodo={this.props.onEditTodo}
+      onDeleteTodo={this.props.onDeleteTodo}
+    />
+  )
+})
+```
+
+<!-- Todo changes -->
+In `components/Todo.js`
+
+```js
+render(){
+    if (this.props.editingTodoId === this.props.todo.id){
+      console.log(`${this.props.todo.body} is being edited`);
+    }
+    return(
+      <p data-todos-index={this.props.todo.id}>
+        <span onClick={() => this.props.onEditTodo(this.props.todo)}>
+          {this.props.todo.body}
+        </span>
+        <span
+          className='deleteButton'
+          onClick={ () => this.props.onDeleteTodo(this.props.todo) }>
+            (X)
+        </span>
+      </p>
+    )
+  }
+```
+
+Phew! Now we can test out our props-flow by clicking on a todo and trigger a `console.log`.
+
+### Implementing update
+
+in `models/Todo.js`:
+
+```js
+static update(todo){
+  let request = axios.put(`http://localhost:4000/todos/${todo.id}`, {body: todo.body})
+  return request
+}
+```
+
+<!-- TodosContainer changes -->
+<!-- Todos changes -->
+<!-- Todo changes -->
+
+## Reusability
+
+Just like we used partials in Rails for forms, we have this same ability in React.
+
+Take a look back at
+
+## Updating Completion Status
