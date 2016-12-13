@@ -540,7 +540,7 @@ In `src/components/Todo.js`:
 ```
 
 ### PAUSE - Why is this awesome?
-We could stop the lesson here and take this knowledge and build lots of cool things with it. Most of the API's developers have access to are read only. That said, if we know an endpoint to get data, we now know how to use React to display that data.
+We could stop the lesson here and take this knowledge and build lots of cool things with it. Most of the API's developers have access to are read-only. That said, if we know an endpoint to get data, we now know how to use React to display that data.
 
 ### Creating Todos
 We're going to want to create a component that handles the form for creating todos. Before we build this feature out, How can we pass state from a child component to a parent? The opposite is easy, because we're able to just pass properties to our child components. Child state to parent state is much more difficult because we can't pass properties like that. Its unidirectional. The answer? Callbacks.
@@ -651,6 +651,7 @@ First off, prevent the default action as form submission will cause a request to
 
 It needs to be supplied from its parent component. Let's update the `src/containers/TodosContainer.js` so that we can successfully create todos:
 
+In `src/containers/TodosContainer.js`:
 ```js
 // At the top import the component
 import CreateTodoForm from '../components/CreateTodoForm'
@@ -687,7 +688,7 @@ static create(todo) {
 }
 ```
 
-Using axios we create the todo. In the promise, we fetch all the todos from the state and push the response to that array, and reset the state.
+Using axios, we create the todo. In the promise, we fetch all the todos and set the state to encapsulates those `todos` from the `res`ponse.
 
 ## Backtrack - How did we pass state from child to parent?
 
@@ -824,9 +825,8 @@ render(){
 Why would we add editingTodoId to the container? Why might the container be aware of a ***single*** todo ID, in the context of an edit?
 <!-- Todos changes -->
 
-In the `components/Todos.js`
+In the `components/Todos.js`, add `editingTodoId` and `onEditTodo` to `<Todo>` props:
 
-add `editingTodoId` and `onEditTodo` to Todo props
 
 ```js
 let todos = this.props.todos.map( (todo) => {
@@ -848,6 +848,11 @@ In `components/Todo.js`
 ```js
 render(){
     if (this.props.editingTodoId === this.props.todo.id){
+      //if we see this console.log, we know that Todo-props are being
+      // passed into TodosContainer, and being set as the
+      // TodosContainer-state, and then trickling down as props to
+      // the Todo component. WHATttttt argh
+      // this is broken down below
       console.log(`${this.props.todo.body} is being edited`);
     }
     return(
@@ -866,10 +871,63 @@ render(){
 ```
 
 Phew! Now we can test out our props-flow by clicking on a todo and trigger a `console.log`.
+### Breaking it Down:
 
-### Implementing update
+#### Trickling Down
 
-in `models/Todo.js`:
+In `TodosContainer`, a method called `editTodo` is setting the `state` of the `<TodosContainer>` component to include a property called `editingTodoId`. That `state` is then ultimately handed down  to the `<Todo>` component. This state trickles down from `<TodosContainer>` to `<Todo>` as props.
+
+#### Bubbling Up (and then Trickling Back Down again)
+
+How are we passing in the corresponding `todo` id back up to `TodosContainer`? The TodosContainer-state is being updated with a particular `todo` id, which is a `prop` of the `<Todo>` component.
+
+It's being passed an argument to a function that **is defined in** and **trickles down from** `TodosContainer`, to here, in `components/Todo.js`:
+
+```js
+<span onClick={() => this.props.onEditTodo(this.props.todo)}>
+```
+
+Elsewhere, over in `containers/TodosContainer.js`:
+
+```js
+render(){
+  return (
+    <div className='TodosContainer'>
+      <h2>This is the Todos Container</h2>
+      <Todos
+        todos={this.state.todos}
+        editingTodoId={this.state.editingTodoId}
+        onEditTodo={this.editTodo.bind(this)}
+        onDeleteTodo={this.deleteTodo.bind(this)} />
+      <CreateTodoForm
+        createTodo={this.createTodo.bind(this)} />
+    </div>
+  )
+}
+```
+
+This certainly the trickiest part of the lesson-- the rest is easy by comparison (still pretty tough, at first!).
+
+### Replacing the console.log with a Form for editing Todos
+
+The next steps here involve composing a form in place of where we have that `console.log` in `components/Todo.js`.
+
+You should replace it with something like this:
+
+```js
+return (
+  <TodoForm
+    autoFocus={true}
+    buttonName="Update Todo!"
+    onTodoAction={this.props.onUpdateTodo} />
+)
+```
+
+You will then have to both write that component and then import it into `components/Todo.js`. Refer to the file-tree in [the example here](https://github.com/ga-wdi-exercises/react-todo/tree/master/src).
+
+### Getting Started with implementing update:
+
+In `models/Todo.js` add:
 
 ```js
 static update(todo){
@@ -878,14 +936,24 @@ static update(todo){
 }
 ```
 
-<!-- TodosContainer changes -->
-<!-- Todos changes -->
-<!-- Todo changes -->
+Think back to what we did for the other CRUD actions--we define some axios behavior in `/models/Todo.js`. Then we define a method in `TodosContainer` that will handle update behavior.
 
-## Reusability
+Then we make our way down from `TodosContainer` to `Todos` to `Todo`, with `state` trickling down as `props`.
+
+Refer again to [the example here](https://github.com/ga-wdi-exercises/react-todo/tree/master/src).
+
+#### Reusability
 
 Just like we used partials in Rails for forms, we have this same ability in React.
 
-Take a look back at
+[General Todo Form](https://github.com/ga-wdi-exercises/react-todo/blob/master/src/components/TodoForm.js)
+
+[Create Todo Form](https://github.com/ga-wdi-exercises/react-todo/blob/master/src/components/CreateTodoForm.js)
+
+Check out how a TodoForm is composed within the CreateTodoForm!
 
 ## Updating Completion Status
+
+You'll just need to make a simple modification to your `fetchData()` method to sort the to-dos.
+
+You'll then need to add UI: a button or some element with an `onClick` that calls a function in `TodosContainer` that **toggles** completeness.
