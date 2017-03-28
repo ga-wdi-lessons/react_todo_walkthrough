@@ -52,7 +52,7 @@ $ nodemon
 ## React Todo
 Alright it's time to build! We're going to be building this application from scratch! It won't be exactly like the repo above, but it'll be pretty close and follow much of the same structure.
 
-> If you get behind, all code written today will be in the lesson plan. Additionally the repo you code reviews contains most of the same code. So please keep questions pertinent to content rather then debugging specific errors you may be getting. Should also note that some of the code snippets will be repetitions to reiterate points of learning. Some of them might just be updates to existing files. Some of them might be brand new content you have to add all of.
+> If you get behind, all code written today will be in the lesson plan. The error messages you'll get in terminal and in the chrome dev tools from React are usually very accurate adn helpful, so please utilize them. Please keep questions pertinent to content. We should also note that some of the code snippets will be repetitions to reiterate points of learning. Some of them might just be updates to existing files. Some of them might be brand new content you have to add all of.
 
 ### Getting Started
 
