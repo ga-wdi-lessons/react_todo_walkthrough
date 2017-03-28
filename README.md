@@ -118,12 +118,14 @@ Let's fill in the contents our `routes.js` file:
 
 ```js
 import React from 'react'
-import {Route} from 'react-router'
 import App from '../App'
+import {HashRouter,Route} from 'react-router-dom';
 
 module.exports = (
-  <Route path='/' component={App}/>
-)
+  <HashRouter>
+    <Route path='/' component={App}/>
+  </HashRouter>
+);
 ```
 
 All we've done here is added some dependencies as well as added our App component to this file. Then we used the `Route` component, given to us by `react-router` to create a route for the root path(`'/'`). We also establish that the component that should be rendered here is the App component we defined earlier.
@@ -137,20 +139,17 @@ Great, we've defined out routes, but it's not going to do anything because nothi
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {Router, browserHistory} from 'react-router'
+import { HashRouter } from 'react-router-dom'
 import routes from './config/routes.js'
+import App from './App'
 
 ReactDOM.render(
-  <Router routes={routes} history={browserHistory}/>,
+  <HashRouter>
+  <App/>
+  </HashRouter>,
   document.getElementById('root')
 );
 ```
-
-In this file, we're using the `Router` component to specify what react should render. We pass in some properties to this `Router` component: `routes`, the file we just defined prior, and `browserHistory`.
-
-We've just gone over `routes.js` but not `browserHistory`.
-
-In a nutshell, a history knows how to listen to the browser's address bar for changes and parses the URL into a location object that the router can use to match routes and render the correct set of components.
 
 Great, we should now be able to see hello world show up!
 
