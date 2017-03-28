@@ -8,7 +8,7 @@
 - Pass state from children components to their parents as arguments to functions
 
 ## Framing 
-For today, we'll be creating a Todo app in React. Before we start coding it, we're going to do a code review of a simple todo application. Then, we'll build the application.
+For today, we'll be creating a Todo app in React. 
 
 We've learned a tremendous amount about object oriented structures for web development. And they were great. With angular, we dabbled a bit with feature-based separation of concerns. React's component model takes that separation further and reduces the potential of tight coupling that often attends object oriented. Think of the FIRST principles:
 
