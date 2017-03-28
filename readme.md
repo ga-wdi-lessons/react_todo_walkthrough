@@ -340,7 +340,6 @@ Note also that `all()` is a static method. What does this mean? A static method 
 let todos = TodoModel.all()
 ```
 
-Does this type syntax look familiar at `.all`? If not, think back to Rails, where in a Todo app, we call the **class method** `.all`:
 
 ```rb
 @todos = Todo.all
@@ -944,7 +943,7 @@ Refer again to [the example here](https://github.com/ga-wdi-exercises/react-todo
 
 #### Reusability
 
-Just like we used partials in Rails for forms, we have this same ability in React.
+We can use something like partials in React.
 
 [General Todo Form](https://github.com/ga-wdi-exercises/react-todo/blob/master/src/components/TodoForm.js)
 
