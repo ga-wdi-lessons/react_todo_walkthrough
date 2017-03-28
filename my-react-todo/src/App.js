@@ -14,7 +14,7 @@ class App extends Component {
         <Header />
       <h1>Hello, and welcome! I am a heading tag in App.js! Have a great day!</h1>
         <Router>
-          <Route expath='/todos' component={TodosContainer}/>
+          <Route exact path='/todos' component={TodosContainer}/>
         </Router>
       </div>
     );
