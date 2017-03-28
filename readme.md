@@ -7,7 +7,7 @@
 - Pass state from parent components to children as props
 - Pass state from children components to their parents as arguments to functions
 
-## Framing (0:10 / 0:10)
+## Framing 
 For today, we'll be creating a Todo app in React. Before we start coding it, we're going to do a code review of a simple todo application. Then, we'll build the application.
 
 We've learned a tremendous amount about object oriented structures for web development. And they were great. With angular, we dabbled a bit with feature-based separation of concerns. React's component model takes that separation further and reduces the potential of tight coupling that often attends object oriented. Think of the FIRST principles:
@@ -37,7 +37,7 @@ Ideally, components should be short and condensed.
 Because the same input will always produce the same output, components are easily unit testable.
 
 
-## You do - Checkout React Todo (0:05 / 0:15)
+## You do - Checkout React Todo 
 Before we can checkout the react todo app, we need to grab up our backend that will serve up our todos:
 
 ```bash
@@ -63,7 +63,7 @@ Now go to `http://localhost:3000` and play with the site!
 
 After we've played with the site for a bit, take a look at the code base. Start at `src/index.js`. In that file, we can see that it uses another file `config/routes.js`. Don't worry too much about understanding all the specific syntax just get a good overview of the code base.
 
-### Code Review in Comments - Pair Up! (0:15 / 0:30)
+### Code Review in Comments - Pair Up! 
 
 Pair up!
 
@@ -97,7 +97,7 @@ $ npm start
 
 Now, if we navigate to [`localhost:3000`](http://localhost:3000) we will see the boilerplate create-react-app React application.
 
-### First Step - Hello World (0:10 / 0:40)
+### First Step - Hello World 
 
 #### Get rid of things we won't use
 
@@ -131,7 +131,7 @@ export default App;
 
 > Hooray for automatic rerendering on save! If we just switch over to our browser we'll automatically see our updates.
 
-### React Router (0:45 / 0:55)
+### React Router 
 We're going to use React Router today to introduce it as a concept. However, it isn't strictly necessary for this application. We're really just going for exposure here. There's a lot to learn about react router and we'll just be scratching the surface. If you want to dive deeper, checkout [this tutorial](https://github.com/reactjs/react-router-tutorial)
 
 We need React Router in the same way that we needed angular routers. We need a way to link to various urls to components in our application. Because our application will be a SPA, we still want to preserve different application-states via the url. This Todo app's application-states (not to be confused with component state) will just be the root url and a url to all todos(`/` and `/todos`)
@@ -185,9 +185,9 @@ In a nutshell, a history knows how to listen to the browser's address bar for ch
 
 Great, we should now be able to see hello world show up!
 
-## Break (0:10 / 1:05)
 
-### A Simple Component (0:05 / 1:10)
+
+### A Simple Component 
 Before we add another route, let's change the header to be more applicable and make it its own component.
 
 In `src/App.js`:
@@ -247,7 +247,7 @@ Warning: [react-router] Location "/todos" did not match any routes
 
 This warning makes sense, our `config/routes.js` only has a reference to `'/'` and nothing else. We'll fix that by adding the first parts of our app's main functionality. But before that... let's talk about containers.
 
-### Containers (0:20 / 1:30)
+### Containers 
 As we first start to write this container, its going to seem like just another component. Remember that  React components should be FIRST: focused, independent, reusable, small, and testable. In order to help keep components slim, a good practice is to move as much of the business logic surrounding a component's state to a container component. We're going to put all that logic in this container. It will start out very similarly to our `Header` component, but end up much more complex.
 
 Let's start by creating a containers folder and then the container file:
@@ -307,7 +307,7 @@ Great everything works!
 
 Everything up to this point, is most of what you need to know about using react for a website NOT using a back end. [Just add css through index.css and you're good to go!](https://gist.github.com/superbuggy/29693beaa19cbc2a9171aba4f373dc32)
 
-### Fetching Data (0:30 / 2:00)
+### Fetching Data 
 
 React actually isn't as full featured as say AngularJS or BackboneJS. It relies on third party libraries to fetch data. Today, we'll be using a library called [Axios](https://github.com/mzabriskie/axios), a promise based HTTP client for the browser and node. Let's install the module now and also create the folder/file that will contain our database logic:
 
