@@ -251,10 +251,11 @@ Then we just have to update the routes in `src/config/routes.js`:
 import TodosContainer from '../containers/TodosContainer'
 
 module.exports = (
-  <Route path='/' component={App}>
+  <HashRouter>
+    <Route path='/' component={App}/>
     <Route path='/todos' component={TodosContainer}/>
-  </Route>
-)
+  </HashRouter>
+);
 ```
 
 If we click on it we should totally see ..... nothing still. But no error now! Because our `/todos` is nested within our `'/'` route, our `App` Component needs to know what to render. We do this by adding one line of code to our `src/App.js`:
