@@ -41,15 +41,13 @@ Because the same input will always produce the same output, components are easil
 Before we can checkout the react todo app, we need to grab up our backend that will serve up our todos:
 
 ```bash
-$ git clone git@github.com:ga-wdi-exercises/react-todo-api.git
-$ cd react-todo-api
-$ bundle exec rake db:create
-$ bundle exec rake db:migrate
-$ bundle exec rake db:seed
-$ rails s -p 4000
+$ git clone git@github.com:sf-wdi-36/todo-crud-api.git
+$ cd todo-crud-api
+$ npm install
+$ nodemon
 ```
 
-> This api needs to be served on port 4000 because when we run our react application it defaults to port 3000.
+> This api needs to be served on port 4000 because when we run our react application it defaults to port 3000. Don't forget to seed the server by going to localhost:4000/reset.
 
 Now lets grab the react todo app:
 
@@ -341,10 +339,6 @@ let todos = TodoModel.all()
 ```
 
 
-```rb
-@todos = Todo.all
-```
-
 **Class methods** don't require an instance of the class in order to be called, but an **instance method** does. [More on Static Methods in JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Static_methods)
 
 We can't really test out the code in this file in isolation, so we must `import` it into our application in order to test it. The logical place to import this code is in the `TodosContainer` component.
@@ -352,6 +346,7 @@ We can't really test out the code in this file in isolation, so we must `import`
 For now, let's toss this in the `TodosContainer`'s `render()` method: this isn't ultimately going to be where we want to call `TodoModel.all()`, but for testing purposes, it will suffice.
 
 In `components/TodosContainer.js`:
+
 ```js
 import React, {Component} from 'react'
 import TodoModel from '../models/Todo'
@@ -513,12 +508,14 @@ If we take a look at the `props` being passed from one component to the next, we
 
 In `src/containers/TodosContainer.js`:
 
-```js
+
+```javascript  
 <Todos
   todos={this.state.todos} />
 ```
 
-In `src/components/Todos.js`:
+In `src/components/Todos.js`:  
+
 ```js
   let todos = this.props.todos.map( (todo) => {
   return (
@@ -650,7 +647,8 @@ First off, prevent the default action as form submission will cause a request to
 
 It needs to be supplied from its parent component. Let's update the `src/containers/TodosContainer.js` so that we can successfully create todos:
 
-In `src/containers/TodosContainer.js`:
+In `src/containers/TodosContainer.js`:  
+
 ```js
 // At the top import the component
 import CreateTodoForm from '../components/CreateTodoForm'
@@ -797,7 +795,6 @@ The `deleteTodo` takes the todo, passed from the child Component of `Todo` up th
 ### Implementing Edit
 
 In `containers/TodosContainer.js`:
-<!-- TodosContainer changes -->
 
 ```js
 editTodo(todo){
@@ -822,7 +819,6 @@ render(){
 ```
 
 Why would we add editingTodoId to the container? Why might the container be aware of a ***single*** todo ID, in the context of an edit?
-<!-- Todos changes -->
 
 In the `components/Todos.js`, add `editingTodoId` and `onEditTodo` to `<Todo>` props:
 
