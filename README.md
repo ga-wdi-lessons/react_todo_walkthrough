@@ -169,7 +169,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <h1>I AM ALIVE</h1>
+      <h1>Hello, and welcome! I am a heading tag in App.js! Have a great day!</h1>
       <Header />
       </div>
     );
@@ -198,7 +198,7 @@ class Header extends Component{
   render(){
     return (
       <header>
-        <p>oranges and carrots</p>
+        <h1><Link to={'/todos'}>React Todos</Link></h1>
       </header>
     )
   }
