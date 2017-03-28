@@ -49,35 +49,6 @@ $ nodemon
 
 > This api needs to be served on port 4000 because when we run our react application it defaults to port 3000. Don't forget to seed the server by going to localhost:4000/reset.
 
-Now lets grab the react todo app:
-
-```bash
-$ git clone git@github.com:ga-wdi-exercises/react-todo.git
-$ npm install
-$ npm start
-```
-
-Now go to `http://localhost:3000` and play with the site!
-
-After we've played with the site for a bit, take a look at the code base. Start at `src/index.js`. In that file, we can see that it uses another file `config/routes.js`. Don't worry too much about understanding all the specific syntax just get a good overview of the code base.
-
-### Code Review in Comments - Pair Up! 
-
-Pair up!
-
-As you both progress from one file to another and scan through the code base, write down in-line comments of what you think that particular piece of code is doing. You don't have to write a comment for every line, but at least one for each function/method
-
-Some things you should consider/do during code review:
-
-- How is the application CRUD'ing the data?
-- What is the application's point of entry?
-- Are any components reused? Which one/ones?
-- How is state being passed from parent components to their children?
-- How is state being passed from child component to it parents? (*this is tough!*)
-- Make use of a `console.log()` if you are not sure what data some variable is holding, or when a method is executing.
-
-> while changing the app, if the code breaks, just do a `$ git checkout -- .` to get back to the original code base
-
 ## React Todo
 Alright it's time to build! We're going to be building this application from scratch! It won't be exactly like the repo above, but it'll be pretty close and follow much of the same structure.
 
