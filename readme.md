@@ -375,8 +375,8 @@ export default TodosContainer
 Awesome, we can see the response from our database as soon as the page loads, we know it's working! However, its completely in the wrong spot and we don't have anything we're passing todos to... yet!
 
 Now that we can get our data, let's code how we present that data. It'll be a bit before we connect these pieces and actually see our todos in our app, but just hold on we'll get there!
-## Break (0:10 / 2:10)
-### Rendering A Todo (0:20 / 2:30)
+
+### Rendering A Todo
 Let's start at the bottom and bubble up. It'll be nice if each todo we're its own component. To follow FIRST(Focused Independent Reusable Small Testable). Let's create `src/components/Todo.js` and put the following in it:
 
 ```js
