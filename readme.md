@@ -56,7 +56,7 @@ Alright it's time to build! We're going to be building this application from scr
 
 ### Getting Started
 
-Close down the react app you have running currently. Next, let's create the react app.
+Now let's create the react app.
 
 ```bash
 $ create-react-app my-react-todo
