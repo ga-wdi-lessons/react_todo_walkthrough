@@ -110,7 +110,6 @@ We need React Router in the same way that we needed angular routers. We need a w
 It's great, Routes are just react Components as well! Let's start by installing the `react-router` dependency, making a `config` folder and a `routes.js` file that will contain our routes:
 
 ```bash
-$ npm install react-router --save
 $ mkdir src/config
 $ touch src/config/routes.js
 ```
@@ -131,7 +130,7 @@ module.exports = (
 
 All we've done here is added some dependencies as well as added our App component to this file. Then we used the `Route` component, given to us by `react-router` to create a route for the root path(`'/'`). We also establish that the component that should be rendered here is the App component we defined earlier.
 
-> Something that's weird is that we imported `React` from `'react'` but then we imported `{Route}` from `'react-router'`. What's with the curly braces? In the latter case we're actually only importing a specific module of the `react-router` and name spacing it within `Route` If we had omitted the curly's it would have grabbed all of `react-router` functionality. Check out the [react router source code](https://github.com/reactjs/react-router/tree/master/modules) and we can clearly see the Route is a module within react-router
+> Something that's weird is that we imported `React` from `'react'` but then we imported `{Route}` from `'react-router-dom'`. What's with the curly braces? In the latter case we're actually only importing a specific module of the `react-router-dom` and name spacing it within `Route` If we had omitted the curly's it would have grabbed all of `react-router-dom` functionality. Check out the [react router source code](https://github.com/reactjs/react-router-dom) and we can clearly see the Route is a module within react-router-dom
 
 Great, we've defined out routes, but it's not going to do anything because nothing knows about this file yet. Let's update our `index.js` to use a Router now instead of just rendering the `App` Component. In `index.js`:
 
@@ -192,7 +191,7 @@ In `src/components/Header.js`:
 
 ```js
 import React, {Component} from 'react'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 
 class Header extends Component{
   render(){
