@@ -61,6 +61,7 @@ Now let's create the react app.
 ```bash
 $ create-react-app my-react-todo
 $ cd my-react-todo
+$ npm install react-router-dom --save
 $ npm start
 ```
 
@@ -145,7 +146,7 @@ import App from './App'
 
 ReactDOM.render(
   <HashRouter>
-  <App/>
+    <App/>
   </HashRouter>,
   document.getElementById('root')
 );
@@ -162,13 +163,14 @@ In `src/App.js`:
 
 ```js
 import React, { Component } from 'react';
-import Header from './components/Header.js'
+import Header from './components/Header'
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header />
+      <h1>I AM ALIVE</h1>
+      <Header />
       </div>
     );
   }
@@ -196,7 +198,7 @@ class Header extends Component{
   render(){
     return (
       <header>
-        <h1><Link to={'/todos'}>React Todos</Link></h1>
+        <p>oranges and carrots</p>
       </header>
     )
   }
