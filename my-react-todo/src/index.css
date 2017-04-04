@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: "Brush Script MT", cursive;
 }
 
 header, .todos {
@@ -22,16 +22,12 @@ h2 {
   border-bottom: 3px solid red;
 }
 
-.completed h2{
-  border-bottom: 3px solid green;
-}
-
 h1, h2{
-  font-family: 'Denk One', sans-serif;
+  font-family: "Brush Script MT", cursive;
 }
 
 p {
-  font-family: 'Indie Flower', cursive;
+  font-family: "Brush Script MT", cursive;
   font-size: 2em;
 }
 
@@ -48,16 +44,9 @@ span.deleteButton, span.toggleButton {
   color: red;
 }
 
-.toggleButton{
-  color:green;
-}
-
-.incomplete span.toggleButton {
-  color:red;
-}
-
 .createForm {
   padding-top: 3em;
+  padding-bottom: 3em;
   margin: auto;
   width: 58%;
 }
