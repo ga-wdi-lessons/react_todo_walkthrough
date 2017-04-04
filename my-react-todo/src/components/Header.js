@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router'
 
 class Header extends Component{
   render(){
     return (
       <header>
-        <h1>Welcome to Todos!</h1>
+        <h1><Link to={'/todos'}>React Todos</Link></h1>
       </header>
     )
   }

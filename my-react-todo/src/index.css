@@ -3,3 +3,61 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+header, .todos {
+  text-align: center
+}
+
+.todosContainer {
+  width: 60%;
+  margin: auto;
+}
+
+h2 {
+  padding-bottom: .5em;
+  margin-bottom: .5em;
+}
+
+.incomplete h2{
+  border-bottom: 3px solid red;
+}
+
+.completed h2{
+  border-bottom: 3px solid green;
+}
+
+h1, h2{
+  font-family: 'Denk One', sans-serif;
+}
+
+p {
+  font-family: 'Indie Flower', cursive;
+  font-size: 2em;
+}
+
+.todoForm {
+  clear:both;
+  text-align: center;
+}
+
+span.deleteButton, span.toggleButton {
+  padding-left: 1em;
+}
+
+.deleteButton{
+  color: red;
+}
+
+.toggleButton{
+  color:green;
+}
+
+.incomplete span.toggleButton {
+  color:red;
+}
+
+.createForm {
+  padding-top: 3em;
+  margin: auto;
+  width: 58%;
+}
