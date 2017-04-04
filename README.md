@@ -7,8 +7,8 @@
 - Pass state from parent components to children as props
 - Pass state from children components to their parents as arguments to functions
 
-## Framing 
-For today, we'll be creating a Todo app in React. 
+## Framing
+For today, we'll be creating a Todo app in React.
 
 We've learned a tremendous amount about object oriented structures for web development. And they were great. With angular, we dabbled a bit with feature-based separation of concerns. React's component model takes that separation further and reduces the potential of tight coupling that often attends object oriented. Think of the FIRST principles:
 
@@ -36,38 +36,25 @@ Ideally, components should be short and condensed.
 
 Because the same input will always produce the same output, components are easily unit testable.
 
-
-## You do - Checkout React Todo 
-Before we can checkout the react todo app, we need to grab up our backend that will serve up our todos:
-
-```bash
-$ git clone git@github.com:sf-wdi-36/todo-crud-api.git
-$ cd todo-crud-api
-$ npm install
-$ nodemon
-```
-
-> This api needs to be served on port 4000 because when we run our react application it defaults to port 3000. Don't forget to seed the server by going to localhost:4000/reset.
-
 ## React Todo
 Alright it's time to build! We're going to be building this application from scratch! It won't be exactly like the repo above, but it'll be pretty close and follow much of the same structure.
 
-> If you get behind, all code written today will be in the lesson plan. The error messages you'll get in terminal and in the chrome dev tools from React are usually very accurate adn helpful, so please utilize them. Please keep questions pertinent to content. We should also note that some of the code snippets will be repetitions to reiterate points of learning. Some of them might just be updates to existing files. Some of them might be brand new content you have to add all of.
+> If you get behind, all code written today will be in the lesson plan. The error messages you'll get in terminal and in the chrome dev tools from React are usually very accurate and helpful, so please utilize them. Please keep questions pertinent to content. We should also note that some of the code snippets will be repetitions to reiterate points of learning. Some of them might just be updates to existing files. Some of them might be brand new content you have to add all of.
 
 ### Getting Started
 
-Now let's create the react app.
+Now let's create the react app. We're going to be using react-router v3 for this, so we will need to install that as well.
 
 ```bash
 $ create-react-app my-react-todo
 $ cd my-react-todo
-$ npm install react-router-dom --save
+$ npm install react-router@3.0.0
 $ npm start
 ```
 
 Now, if we navigate to [`localhost:3000`](http://localhost:3000) we will see the boilerplate create-react-app React application.
 
-### First Step - Hello World 
+### First Step - Hello World
 
 #### Get rid of things we won't use
 
@@ -101,7 +88,7 @@ export default App;
 
 > Hooray for automatic rerendering on save! If we just switch over to our browser we'll automatically see our updates.
 
-### React Router 
+### React Router
 We're going to use React Router today to introduce it as a concept. However, it isn't strictly necessary for this application. We're really just going for exposure here. There's a lot to learn about react router and we'll just be scratching the surface. If you want to dive deeper, checkout [this tutorial](https://github.com/reactjs/react-router-tutorial)
 
 We need React Router in the same way that we needed angular routers. We need a way to link to various urls to components in our application. Because our application will be a SPA, we still want to preserve different application-states via the url. This Todo app's application-states (not to be confused with component state) will just be the root url and a url to all todos(`/` and `/todos`)
@@ -139,14 +126,11 @@ Great, we've defined out routes, but it's not going to do anything because nothi
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { HashRouter } from 'react-router-dom'
+import {Router, browserHistory} from 'react-router'
 import routes from './config/routes.js'
-import App from './App'
 
 ReactDOM.render(
-  <HashRouter>
-    <App/>
-  </HashRouter>,
+  <Router routes={routes} history={browserHistory}/>,
   document.getElementById('root')
 );
 ```
@@ -155,7 +139,7 @@ Great, we should now be able to see hello world show up!
 
 
 
-### A Simple Component 
+### A Simple Component
 Before we add another route, let's change the header to be more applicable and make it its own component.
 
 In `src/App.js`:
@@ -191,7 +175,7 @@ In `src/components/Header.js`:
 
 ```js
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router'
 
 class Header extends Component{
   render(){
@@ -216,7 +200,7 @@ Warning: [react-router] Location "/todos" did not match any routes
 
 This warning makes sense, our `config/routes.js` only has a reference to `'/'` and nothing else. We'll fix that by adding the first parts of our app's main functionality. But before that... let's talk about containers.
 
-### Containers 
+### Containers
 As we first start to write this container, its going to seem like just another component. Remember that  React components should be FIRST: focused, independent, reusable, small, and testable. In order to help keep components slim, a good practice is to move as much of the business logic surrounding a component's state to a container component. We're going to put all that logic in this container. It will start out very similarly to our `Header` component, but end up much more complex.
 
 Let's start by creating a containers folder and then the container file:
@@ -251,10 +235,9 @@ Then we just have to update the routes in `src/config/routes.js`:
 import TodosContainer from '../containers/TodosContainer'
 
 module.exports = (
-  <HashRouter>
-    <Route path='/' component={App}/>
+  <Route path='/' component={App}>
     <Route path='/todos' component={TodosContainer}/>
-  </HashRouter>
+  </Route>
 );
 ```
 
@@ -277,7 +260,7 @@ Great everything works!
 
 Everything up to this point, is most of what you need to know about using react for a website NOT using a back end. [Just add css through index.css and you're good to go!](https://gist.github.com/superbuggy/29693beaa19cbc2a9171aba4f373dc32)
 
-### Fetching Data 
+### Fetching Data
 
 React actually isn't as full featured as say AngularJS or BackboneJS. It relies on third party libraries to fetch data. Today, we'll be using a library called [Axios](https://github.com/mzabriskie/axios), a promise based HTTP client for the browser and node. Let's install the module now and also create the folder/file that will contain our database logic:
 
@@ -287,14 +270,14 @@ $ mkdir src/models
 $ touch src/models/Todo.js
 ```
 
-Now in `src/models/Todo.js`:
+Now in `src/models/Todo.js`, we are going to use our beloved super-crud API endpoint of todos to get some data (you can check out the raw json at https://super-crud.herokuapp.com/todos):
 
 ```js
 import axios from 'axios'
 
 class TodoModel {
   static all(){
-    let request = axios.get("http://localhost:4000/todos")
+    let request = axios.get("https://super-crud.herokuapp.com/todos")
     return request
   }
 }
@@ -376,7 +359,7 @@ class Todos extends Component {
     let todos = this.props.todos.map( (todo) => {
       return (
         <Todo
-          key={todo.id}
+          key={todo._id}
           todo={todo}/>
       )
     })
@@ -415,7 +398,7 @@ class TodosContainer extends Component {
   fetchData(){
     TodoModel.all().then( (res) => {
       this.setState ({
-        todos: res.data,
+        todos: res.data.todo,
         todo: ''
       })
     })
@@ -502,7 +485,7 @@ In `src/components/Todos.js`:
 In `src/components/Todo.js`:
 
 ```js
-<p data-todos-index={this.props.todo.id}>
+<p data-todos-index={this.props.todo._id}>
   <span>{this.props.todo.body}</span>
 </p>
 ```
@@ -626,12 +609,16 @@ In `src/containers/TodosContainer.js`:
 import CreateTodoForm from '../components/CreateTodoForm'
 
 // adding rest of code to container, more code above
-createTodo(todo){
-  let newTodo = {body: todo, completed: false}
-  TodoModel.create(newTodo).then( (res) => {
-    let todos = res.data
-    this.setState({todos})
-  })
+createTodo(todo) {
+    let newTodo = {
+        body: todo,
+        completed: false
+    }
+    TodoModel.create(newTodo).then((res) => {
+        let todos = this.state.todos
+        let newTodos = todos.push(res.data)
+        this.setState({newTodos})
+    })
 }
 render(){
   return (
@@ -652,7 +639,7 @@ In the actual `createTodo` function. We can see that we construct everything we 
 
 ```js
 static create(todo) {
-  let request = axios.post("http://localhost:4000/todos", todo)
+  let request = axios.post("https://super-crud.herokuapp.com/todos", todo)
   return request
 }
 ```
@@ -721,7 +708,7 @@ We've added a span with an `X` in it. When it gets clicked it invokes the `onDel
 let todos = this.props.todos.map( (todo) => {
   return (
     <Todo
-      key={todo.id}
+      key={todo._id}
       todo={todo}
       onDeleteTodo={this.props.onDeleteTodo}/>
   )
@@ -731,11 +718,13 @@ let todos = this.props.todos.map( (todo) => {
 Looks like it's not defined here either but passed yet again from a parent container. Finally in the `src/components/TodosContainer.js`:
 
 ```js
-deleteTodo(todo){
-  TodoModel.delete(todo).then( (res)=>{
-    let todos = res.data
-    this.setState({todos})
-  })
+deleteTodo(todo) {
+    TodoModel.delete(todo).then((res) => {
+        let todos = this.state.todos.filter(function(todo) {
+          return todo._id !== res.data._id
+        });
+        this.setState({todos})
+    })
 }
 render(){
   return (
@@ -755,7 +744,7 @@ Before we talk about the above code, lets look at what delete looks like in our 
 
 ```js
 static delete(todo){
-  let request = axios.delete(`http://localhost:4000/todos/${todo.id}`)
+  let request = axios.delete(`https://super-crud.herokuapp.com/todos/${todo._id}`)
   return request
 }
 ```
@@ -769,9 +758,20 @@ The `deleteTodo` takes the todo, passed from the child Component of `Todo` up th
 In `containers/TodosContainer.js`:
 
 ```js
+updateTodo(todoBody) {
+    var todoId = this.state.editingTodoId
+    function isUpdatedTodo(todo) {
+        return todo._id === todoId;
+    }
+    TodoModel.update(todoId, todoBody).then((res) => {
+        let todos = this.state.todos
+        todos.find(isUpdatedTodo).body = todoBody
+        this.setState({todos: todos, editingTodoId: null, editing: null})
+    })
+}
 editTodo(todo){
   this.setState({
-    editingTodoId: todo.id
+    editingTodoId: todo._id
   })
 }
 render(){
@@ -796,30 +796,28 @@ In the `components/Todos.js`, add `editingTodoId` and `onEditTodo` to `<Todo>` p
 
 
 ```js
+//....
 let todos = this.props.todos.map( (todo) => {
   return (
     <Todo
-      key={todo.id}
+      key={todo._id}
       todo={todo}
       editingTodoId={this.props.editingTodoId}
       onEditTodo={this.props.onEditTodo}
       onDeleteTodo={this.props.onDeleteTodo}
+      onUpdateTodo={this.props.onUpdateTodo}
     />
   )
 })
+//...
 ```
 
 <!-- Todo changes -->
-In `components/Todo.js`
+In `components/Todo.js` We need to use the method:
 
 ```js
 render(){
-    if (this.props.editingTodoId === this.props.todo.id){
-      //if we see this console.log, we know that Todo-props are being
-      // passed into TodosContainer, and being set as the
-      // TodosContainer-state, and then trickling down as props to
-      // the Todo component. WHATttttt argh
-      // this is broken down below
+    if (this.props.editingTodoId === this.props.todo._id){
       console.log(`${this.props.todo.body} is being edited`);
     }
     return(
@@ -890,16 +888,87 @@ return (
 )
 ```
 
-You will then have to both write that component and then import it into `components/Todo.js`. Refer to the file-tree in [the example here](https://github.com/ga-wdi-exercises/react-todo/tree/master/src).
-
-### Getting Started with implementing update:
-
-In `models/Todo.js` add:
+You will then have to both write that component and then import it into `components/Todo.js`:
 
 ```js
-static update(todo){
-  let request = axios.put(`http://localhost:4000/todos/${todo.id}`, {body: todo.body})
-  return request
+
+//TodoForm.js
+import React, {Component} from 'react'
+
+class TodoForm extends Component {
+  onChange(event) {
+    this.setState({
+      todo: event.target.value
+    })
+  }
+  onSubmit(event){
+    event.preventDefault()
+    var todo = this.state.todo
+    console.log("todo is", todo)
+    this.props.onUpdateTodo(todo)
+    this.setState({
+      todo: ""
+    })
+  }
+  render(){
+    return (
+      <div className='todoForm'>
+        <form onSubmit={e => this.onSubmit(e)}>
+          <input
+            autoFocus={this.props.autoFocus}
+            onChange={e => this.onChange(e)}
+            placeholder='Write a todo here ...'
+            type='text'
+            value={(this.state && this.state.todo) || ''} />
+          <button type='submit'>{this.props.buttonName}</button>
+        </form>
+      </div>
+    )
+  }
+}
+
+export default TodoForm
+
+```
+
+```js
+//Todo.js
+//...
+console.log(`${this.props.todo.body} is being edited`);
+return (
+  <TodoForm
+    autoFocus={true}
+    onUpdateTodo={this.props.onUpdateTodo}
+    buttonName="Update Todo!"/>
+)
+//...
+```
+
+```js
+//Todos.js
+let todos = this.props.todos.map( (todo) => {
+  return (
+    <Todo
+      key={todo._id}
+      todo={todo}
+      editingTodoId={this.props.editingTodoId}
+      onEditTodo={this.props.onEditTodo}
+      onDeleteTodo={this.props.onDeleteTodo}
+      onUpdateTodo={this.props.onUpdateTodo}
+    />
+  )
+})
+//...
+```
+
+In `models/Todo.js` add our method:
+
+```js
+static update(todoId, todoBody) {
+    let request = axios.put(`https://super-crud.herokuapp.com/todos/${todoId}`, {
+        body: todoBody
+    })
+    return request
 }
 ```
 
@@ -907,20 +976,6 @@ Think back to what we did for the other CRUD actions--we define some axios behav
 
 Then we make our way down from `TodosContainer` to `Todos` to `Todo`, with `state` trickling down as `props`.
 
-Refer again to [the example here](https://github.com/ga-wdi-exercises/react-todo/tree/master/src).
+## Conclusion
 
-#### Reusability
-
-We can use something like partials in React.
-
-[General Todo Form](https://github.com/ga-wdi-exercises/react-todo/blob/master/src/components/TodoForm.js)
-
-[Create Todo Form](https://github.com/ga-wdi-exercises/react-todo/blob/master/src/components/CreateTodoForm.js)
-
-Check out how a TodoForm is composed within the CreateTodoForm!
-
-## Updating Completion Status
-
-You'll just need to make a simple modification to your `fetchData()` method to sort the to-dos.
-
-You'll then need to add UI: a button or some element with an `onClick` that calls a function in `TodosContainer` that **toggles** completeness.
+We've learned how to do full CRUD for a basic todo app here. We've seen in particular how props can be trickled down through parent and child components to make a very modular app. We've also been introduced to the magic of axios for network calls from our frontend.
