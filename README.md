@@ -105,14 +105,12 @@ Let's fill in the contents our `routes.js` file:
 
 ```js
 import React from 'react'
+import {Route} from 'react-router'
 import App from '../App'
-import {HashRouter,Route} from 'react-router-dom';
 
 module.exports = (
-  <HashRouter>
-    <Route path='/' component={App}/>
-  </HashRouter>
-);
+  <Route path='/' component={App}/>
+)
 ```
 
 All we've done here is added some dependencies as well as added our App component to this file. Then we used the `Route` component, given to us by `react-router` to create a route for the root path(`'/'`). We also establish that the component that should be rendered here is the App component we defined earlier.
